@@ -7,7 +7,7 @@
 
 uint16_t compute_checksum(uint8_t* buffer, size_t total_len);
 
-int segment_init(Segment* seg, uint16_t seq, uint8_t flags, const uint8_t* data, size_t data_len) {
+int segment_init(segment_t* seg, uint16_t seq, uint8_t flags, const uint8_t* data, size_t data_len) {
     if ((flags & ~0x07) != 0) {
         fprintf(stderr ,"Invalid control field: %d\n", flags);
         return -1;
@@ -25,7 +25,7 @@ int segment_init(Segment* seg, uint16_t seq, uint8_t flags, const uint8_t* data,
     return 0;
 }
 
-int segment_to_bytes(Segment* seg, uint8_t** out_buffer) {
+int segment_to_bytes(segment_t* seg, uint8_t** out_buffer) {
     size_t total_len = HEADER_LEN + seg->data_len;
 
     uint8_t* buffer = (uint8_t*)malloc(total_len);
@@ -54,7 +54,7 @@ int segment_to_bytes(Segment* seg, uint8_t** out_buffer) {
     return 0;
 }
 
-int segment_from_bytes(Segment* seg, uint8_t* buffer, size_t total_len) {
+int segment_from_bytes(segment_t* seg, uint8_t* buffer, size_t total_len) {
     if (total_len < HEADER_LEN) {
         return -1;
     }
